@@ -16,7 +16,7 @@ while True:
     try:
         number = int(userInput)
 
-#Check whether input is negative
+#Check whether input is negative or 0
         if number <= 0:
             print("Please key in a positive number.")
             entryFailed += 1
