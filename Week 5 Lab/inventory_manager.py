@@ -1,3 +1,38 @@
+import json
+from pathlib import Path
+
+file_path = Path(__file__).parent / "inventory.json"
+
+
+# ---------------------------------------------------------------
+# Data Persistence Functions
+# ---------------------------------------------------------------
+
+def load_inventory():
+    # Loads the product list from inventory.json.
+    # Returns an empty list if the file is missing or unreadable.
+
+    if not file_path.exists():
+        print("inventory.json not found. Starting with an empty inventory.")
+        return []
+
+    print("inventory.json found.")
+
+    try:
+        with open(file_path, "r") as file:
+            inventory = json.load(file)
+
+        if not isinstance(inventory, list):
+            raise ValueError("Inventory must be a list of products.")
+
+        print("Inventory loaded successfully.")
+        return inventory
+
+    except (json.JSONDecodeError, ValueError):
+        print("inventory.json is empty or incorrectly formatted. Starting with an empty inventory.")
+        return []
+
+
 # ---------------------------------------------------------------
 # Data Manipulation Functions
 # ---------------------------------------------------------------
@@ -134,13 +169,7 @@ def main():
     print("INVENTORY MANAGEMENT SYSTEM")
     print("=" * 40)
 
-    # Starting products stored as a list of dictionaries
-    inventory = [
-        {"id": "P001", "name": "Laptop", "price": 1200.00, "stock": 15},
-        {"id": "P002", "name": "Mouse", "price": 25.50, "stock": 40},
-        {"id": "P003", "name": "Keyboard", "price": 45.00, "stock": 25}
-    ]
-
+    inventory = load_inventory()
     display_all(inventory)
 
 
