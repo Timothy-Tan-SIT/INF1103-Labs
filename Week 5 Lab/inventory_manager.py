@@ -1,7 +1,11 @@
 import json
+import os
 from pathlib import Path
 
-file_path = Path(__file__).parent / "inventory.json"
+# Folder where inventory.json lives.
+# Locally this is the script's folder; in Docker, set DATA_DIR to the mounted volume.
+data_dir = Path(os.environ.get("DATA_DIR", Path(__file__).parent))
+file_path = data_dir / "inventory.json"
 
 
 # ---------------------------------------------------------------
@@ -31,6 +35,17 @@ def load_inventory():
     except (json.JSONDecodeError, ValueError):
         print("inventory.json is empty or incorrectly formatted. Starting with an empty inventory.")
         return []
+
+
+def save_inventory(inventory):
+    # Saves the product list to inventory.json.
+
+    data_dir.mkdir(parents=True, exist_ok=True)
+
+    with open(file_path, "w") as file:
+        json.dump(inventory, file, indent=4)
+
+    print(f"Inventory saved successfully to {file_path.name}.")
 
 
 # ---------------------------------------------------------------
@@ -164,13 +179,58 @@ def display_all(inventory):
     print("-" * 48)
 
 
+# ---------------------------------------------------------------
+# Menu System
+# ---------------------------------------------------------------
+
+def show_menu():
+    print("\n----------- MENU -----------")
+    print("1. Display All Products")
+    print("2. Add Product")
+    print("3. Update Stock")
+    print("4. Search Product")
+    print("5. Save Inventory")
+    print("6. Exit")
+    print("----------------------------")
+
+
 def main():
     print("=" * 40)
     print("INVENTORY MANAGEMENT SYSTEM")
     print("=" * 40)
 
     inventory = load_inventory()
-    display_all(inventory)
+
+    while True:
+        show_menu()
+        option = input("Enter option: ").strip()
+
+        match option:
+            case "1":
+                display_all(inventory)
+
+            case "2":
+                add_product(inventory)
+
+            case "3":
+                update_stock(inventory)
+
+            case "4":
+                search_product(inventory)
+
+            case "5":
+                print("Saving inventory...")
+                save_inventory(inventory)
+
+            case "6":
+                print("Saving inventory before exit...")
+                save_inventory(inventory)
+                print("Thank you for using Inventory Management System.")
+                print("Program terminated.")
+                break
+
+            case _:
+                print("Invalid option. Please enter a number from 1 to 6.")
 
 
 if __name__ == "__main__":
