@@ -19,8 +19,8 @@
         "stock": 100,
         "supplier": {
             "id": "S01",
-            "name": "Hasbro",
-            "contact_email": "sales@hasbro.example"
+            "name": "Yamaha",
+            "contact_email": "sales@yamaha.example"
         },
         "type": "digital",
         "download_size": 350.0
