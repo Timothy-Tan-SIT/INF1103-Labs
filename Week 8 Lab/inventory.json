@@ -15,6 +15,12 @@
         "id": "P003",
         "name": "Keyboard",
         "price": 45.0,
-        "stock": 25
+        "stock": 30
+    },
+    {
+        "id": "P004",
+        "name": "Headphone",
+        "price": 50.0,
+        "stock": 20
     }
 ]
